@@ -2,6 +2,7 @@ import { LogOut, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface HeaderProps {
   onCreateCollection: () => void;
@@ -33,6 +34,7 @@ const Header = ({ onCreateCollection }: HeaderProps) => {
               <Plus className="h-4 w-4" />
               New Collection
             </Button>
+            <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={signOut}>
               <LogOut className="h-4 w-4" />
             </Button>
