@@ -16,6 +16,7 @@ interface Collection {
   description: string | null;
   created_at: string;
   cardCount?: number;
+  share_token?: string | null;
 }
 
 const Dashboard = () => {

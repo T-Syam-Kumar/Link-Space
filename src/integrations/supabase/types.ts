@@ -61,6 +61,7 @@ export type Database = {
           description: string | null
           id: string
           name: string
+          share_token: string | null
           updated_at: string
           user_id: string
         }
@@ -69,6 +70,7 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
+          share_token?: string | null
           updated_at?: string
           user_id: string
         }
@@ -77,6 +79,7 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
+          share_token?: string | null
           updated_at?: string
           user_id?: string
         }
