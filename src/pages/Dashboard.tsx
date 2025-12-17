@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, FolderPlus } from 'lucide-react';
+import { Loader2, FolderPlus, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Header from '@/components/Header';
 import CollectionCard from '@/components/CollectionCard';
 import CollectionView from '@/components/CollectionView';
@@ -24,6 +25,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -57,6 +59,16 @@ const Dashboard = () => {
     setCollections(collectionsWithCounts);
     setLoading(false);
   };
+
+  const filteredCollections = useMemo(() => {
+    if (!searchQuery.trim()) return collections;
+    const query = searchQuery.toLowerCase();
+    return collections.filter(
+      (c) =>
+        c.name.toLowerCase().includes(query) ||
+        c.description?.toLowerCase().includes(query)
+    );
+  }, [collections, searchQuery]);
 
   const handleCreateCollection = async (name: string, description: string) => {
     if (!user) return;
@@ -123,6 +135,24 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
+        {!loading && collections.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search collections..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </motion.div>
+        )}
+
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -147,10 +177,18 @@ const Dashboard = () => {
               Create Collection
             </Button>
           </motion.div>
+        ) : filteredCollections.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20"
+          >
+            <p className="text-muted-foreground">No collections match your search.</p>
+          </motion.div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence>
-              {collections.map((collection, index) => (
+              {filteredCollections.map((collection, index) => (
                 <CollectionCard
                   key={collection.id}
                   collection={collection}

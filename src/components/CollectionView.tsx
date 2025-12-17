@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Plus, Folder, Loader2, Share2, Link as LinkIcon, Check, X } from 'lucide-react';
+import { ArrowLeft, Plus, Folder, Loader2, Share2, Link as LinkIcon, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import LinkCard from '@/components/LinkCard';
 import AddCardDialog from '@/components/AddCardDialog';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,6 +34,7 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [shareToken, setShareToken] = useState<string | null>(collection.share_token || null);
   const [sharing, setSharing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -54,6 +56,16 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
     }
     setLoading(false);
   };
+
+  const filteredCards = useMemo(() => {
+    if (!searchQuery.trim()) return cards;
+    const query = searchQuery.toLowerCase();
+    return cards.filter(
+      (c) =>
+        c.name.toLowerCase().includes(query) ||
+        c.url.toLowerCase().includes(query)
+    );
+  }, [cards, searchQuery]);
 
   const handleAddCard = async (name: string, url: string) => {
     if (!user) return;
@@ -190,6 +202,24 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {!loading && cards.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search links..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </motion.div>
+        )}
+
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -214,10 +244,18 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
               Add Link
             </Button>
           </motion.div>
+        ) : filteredCards.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20"
+          >
+            <p className="text-muted-foreground">No links match your search.</p>
+          </motion.div>
         ) : (
           <div className="grid gap-3">
             <AnimatePresence>
-              {cards.map((card, index) => (
+              {filteredCards.map((card, index) => (
                 <LinkCard
                   key={card.id}
                   card={card}
