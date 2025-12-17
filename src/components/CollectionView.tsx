@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Plus, Folder, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, Folder, Loader2, Share2, Link as LinkIcon, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LinkCard from '@/components/LinkCard';
 import AddCardDialog from '@/components/AddCardDialog';
@@ -19,6 +19,7 @@ interface Collection {
   id: string;
   name: string;
   description: string | null;
+  share_token?: string | null;
 }
 
 interface CollectionViewProps {
@@ -30,6 +31,8 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [shareToken, setShareToken] = useState<string | null>(collection.share_token || null);
+  const [sharing, setSharing] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -81,6 +84,46 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
     }
   };
 
+  const handleToggleShare = async () => {
+    setSharing(true);
+    
+    if (shareToken) {
+      // Disable sharing
+      const { error } = await supabase
+        .from('collections')
+        .update({ share_token: null })
+        .eq('id', collection.id);
+
+      if (error) {
+        toast.error('Failed to disable sharing');
+      } else {
+        setShareToken(null);
+        toast.success('Sharing disabled');
+      }
+    } else {
+      // Enable sharing with new token
+      const newToken = crypto.randomUUID();
+      const { error } = await supabase
+        .from('collections')
+        .update({ share_token: newToken })
+        .eq('id', collection.id);
+
+      if (error) {
+        toast.error('Failed to enable sharing');
+      } else {
+        setShareToken(newToken);
+        toast.success('Sharing enabled!');
+      }
+    }
+    setSharing(false);
+  };
+
+  const copyShareLink = () => {
+    const link = `${window.location.origin}/shared/${shareToken}`;
+    navigator.clipboard.writeText(link);
+    toast.success('Link copied to clipboard!');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -110,10 +153,38 @@ const CollectionView = ({ collection, onBack }: CollectionViewProps) => {
               </div>
             </div>
 
-            <Button onClick={() => setShowAddDialog(true)}>
-              <Plus className="h-4 w-4" />
-              Add Link
-            </Button>
+            <div className="flex items-center gap-2">
+              {shareToken ? (
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={copyShareLink}>
+                    <LinkIcon className="h-4 w-4" />
+                    Copy Link
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={handleToggleShare}
+                    disabled={sharing}
+                  >
+                    <X className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleToggleShare}
+                  disabled={sharing}
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </Button>
+              )}
+              <Button onClick={() => setShowAddDialog(true)}>
+                <Plus className="h-4 w-4" />
+                Add Link
+              </Button>
+            </div>
           </div>
         </div>
       </header>
