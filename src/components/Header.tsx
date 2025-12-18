@@ -1,8 +1,9 @@
-import { LogOut, Plus } from 'lucide-react';
+import { LogOut, Plus, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onCreateCollection: () => void;
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 const Header = ({ onCreateCollection }: HeaderProps) => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <motion.header
@@ -33,6 +35,9 @@ const Header = ({ onCreateCollection }: HeaderProps) => {
             <Button onClick={onCreateCollection} size="sm">
               <Plus className="h-4 w-4" />
               New Collection
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => navigate('/profile')}>
+              <User className="h-4 w-4" />
             </Button>
             <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={signOut}>
