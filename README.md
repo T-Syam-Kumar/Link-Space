@@ -1,5 +1,3 @@
----
-
 ````md
 # 🔗 LinkSpace – Personal Link Organizer
 
@@ -111,7 +109,3 @@ This project is open-source and available under the **MIT License**.
 Passionate about Full-Stack Development & AI
 
 If you like this project, don’t forget to ⭐ star the repository!
-
-```
-
----
