@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Edit, Github, Linkedin, Globe, Mail, Phone, Users, UserPlus, UserMinus, Loader2 } from 'lucide-react';
+import { ArrowLeft, Edit, Github, Linkedin, Globe, Mail, Phone, UserPlus, UserMinus, Loader2, Share2, Folder, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,6 +9,13 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import EditProfileDialog from '@/components/EditProfileDialog';
 import { ThemeToggle } from '@/components/ThemeToggle';
+
+interface SharedCollection {
+  id: string;
+  name: string;
+  description: string | null;
+  share_token: string;
+}
 
 interface Profile {
   id: string;
@@ -34,6 +41,7 @@ const Profile = () => {
   const [followingCount, setFollowingCount] = useState(0);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
+  const [sharedCollections, setSharedCollections] = useState<SharedCollection[]>([]);
 
   const profileUserId = userId || user?.id;
   const isOwnProfile = user?.id === profileUserId;
@@ -42,11 +50,29 @@ const Profile = () => {
     if (profileUserId) {
       fetchProfile();
       fetchFollowStats();
+      fetchSharedCollections();
       if (user && !isOwnProfile) {
         checkIfFollowing();
       }
     }
   }, [profileUserId, user]);
+
+  const fetchSharedCollections = async () => {
+    const { data } = await supabase
+      .from('collections')
+      .select('id, name, description, share_token')
+      .eq('user_id', profileUserId!)
+      .not('share_token', 'is', null)
+      .order('created_at', { ascending: false });
+
+    setSharedCollections((data as SharedCollection[]) || []);
+  };
+
+  const copyProfileLink = () => {
+    const link = `${window.location.origin}/profile/${profileUserId}`;
+    navigator.clipboard.writeText(link);
+    toast.success('Profile link copied!');
+  };
 
   const fetchProfile = async () => {
     setLoading(true);
@@ -211,12 +237,18 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex gap-2">
               {isOwnProfile ? (
-                <Button onClick={() => setShowEditDialog(true)}>
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit Profile
-                </Button>
+                <>
+                  <Button onClick={() => setShowEditDialog(true)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                  <Button variant="outline" onClick={copyProfileLink}>
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Share Profile
+                  </Button>
+                </>
               ) : (
                 <Button 
                   onClick={handleFollow} 
@@ -300,6 +332,34 @@ const Profile = () => {
               </div>
             )}
           </div>
+
+          {sharedCollections.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-border">
+              <h2 className="font-display font-semibold text-lg text-foreground mb-4">
+                Shared Collections
+              </h2>
+              <div className="grid gap-3">
+                {sharedCollections.map((collection) => (
+                  <Link
+                    key={collection.id}
+                    to={`/shared/${collection.share_token}`}
+                    className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
+                  >
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Folder className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground truncate">{collection.name}</p>
+                      {collection.description && (
+                        <p className="text-sm text-muted-foreground truncate">{collection.description}</p>
+                      )}
+                    </div>
+                    <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
       </main>
 
