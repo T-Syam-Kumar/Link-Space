@@ -23,10 +23,10 @@ const Header = ({ onCreateCollection }: HeaderProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 gradient-hero rounded-xl flex items-center justify-center">
-              <span className="text-lg font-display font-bold text-primary-foreground">LC</span>
+              <span className="text-lg font-display font-bold text-primary-foreground">LS</span>
             </div>
             <div>
-              <h1 className="font-display font-bold text-xl text-foreground">LinkCollect</h1>
+              <h1 className="font-display font-bold text-xl text-foreground">LinkSpace</h1>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
           </div>
