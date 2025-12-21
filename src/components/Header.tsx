@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
+import linkspaceLogo from '@/assets/linkspace-logo.png';
 
 interface HeaderProps {
   onCreateCollection: () => void;
@@ -22,9 +23,7 @@ const Header = ({ onCreateCollection }: HeaderProps) => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 gradient-hero rounded-xl flex items-center justify-center">
-              <span className="text-lg font-display font-bold text-primary-foreground">LS</span>
-            </div>
+            <img src={linkspaceLogo} alt="LinkSpace" className="h-10 w-auto" />
             <div>
               <h1 className="font-display font-bold text-xl text-foreground">LinkSpace</h1>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
