@@ -37,7 +37,7 @@ const SharedCollection = () => {
     // Fetch collection by share token
     const { data: collectionData, error: collectionError } = await supabase
       .from('collections')
-      .select('*')
+      .select('id, name, description, share_token, created_at, updated_at')
       .eq('share_token', shareToken)
       .maybeSingle();
 
