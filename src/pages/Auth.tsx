@@ -58,8 +58,10 @@ const Auth = () => {
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             toast.error('Invalid email or password');
+          } else if (error.message.includes('Email not confirmed')) {
+            toast.error('Please verify your email before signing in');
           } else {
-            toast.error(error.message);
+            toast.error('Unable to sign in. Please try again later.');
           }
         } else {
           toast.success('Welcome back!');
@@ -71,7 +73,7 @@ const Auth = () => {
           if (error.message.includes('already registered')) {
             toast.error('This email is already registered. Please sign in.');
           } else {
-            toast.error(error.message);
+            toast.error('Unable to create account. Please try again later.');
           }
         } else {
           toast.success('Account created successfully!');
