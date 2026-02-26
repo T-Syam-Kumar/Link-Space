@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,27 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+
+const urlSchema = z
+  .string()
+  .trim()
+  .refine(
+    (val) => val === '' || /^https?:\/\/.+/.test(val),
+    { message: 'URL must start with http:// or https://' }
+  );
+
+const profileSchema = z.object({
+  name: z.string().trim().max(100, 'Name must be less than 100 characters'),
+  contact: z.string().trim().max(50, 'Contact must be less than 50 characters'),
+  email: z.string().trim().refine(
+    (val) => val === '' || z.string().email().safeParse(val).success,
+    { message: 'Invalid email address' }
+  ),
+  bio: z.string().trim().max(500, 'Bio must be less than 500 characters'),
+  linkedin_url: urlSchema,
+  github_url: urlSchema,
+  website_url: urlSchema,
+});
 
 interface Profile {
   id: string;
@@ -45,8 +67,21 @@ const EditProfileDialog = ({ open, onOpenChange, profile, onSave }: EditProfileD
     website_url: profile.website_url || '',
   });
 
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const result = profileSchema.safeParse(formData);
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) errors[err.path[0] as string] = err.message;
+      });
+      setValidationErrors(errors);
+      return;
+    }
+    setValidationErrors({});
     setLoading(true);
 
     const { error } = await supabase
@@ -129,6 +164,9 @@ const EditProfileDialog = ({ open, onOpenChange, profile, onSave }: EditProfileD
               onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
               placeholder="https://linkedin.com/in/username"
             />
+            {validationErrors.linkedin_url && (
+              <p className="text-sm text-destructive">{validationErrors.linkedin_url}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -139,6 +177,9 @@ const EditProfileDialog = ({ open, onOpenChange, profile, onSave }: EditProfileD
               onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
               placeholder="https://github.com/username"
             />
+            {validationErrors.github_url && (
+              <p className="text-sm text-destructive">{validationErrors.github_url}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -149,6 +190,9 @@ const EditProfileDialog = ({ open, onOpenChange, profile, onSave }: EditProfileD
               onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
               placeholder="https://yourwebsite.com"
             />
+            {validationErrors.website_url && (
+              <p className="text-sm text-destructive">{validationErrors.website_url}</p>
+            )}
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
