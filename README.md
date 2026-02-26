@@ -9,7 +9,7 @@ Whether it's useful articles, tools, learning resources, or important URLs, Link
 
 ## ✨ Features
  
-- 🔐 **User Authentication** – Secure login & signup with email
+- 🔐 **User Authentication** – Secure login & signup with email 
 - 📁 **Collections** – Organize links into custom collections
 - 📌 **Save & Manage Links** – Add, edit, and delete personal links
 - 🔗 **Share Collections** – Generate shareable links for your collections
