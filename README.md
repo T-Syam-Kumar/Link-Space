@@ -3,7 +3,7 @@
 LinkSpace is a modern web application that helps users store, organize, and manage their personal links in one secure place.  
 Whether it's useful articles, tools, learning resources, or important URLs, LinkSpace keeps everything structured and accessible anytime, anywhere.
 
-🌐 **Live Website:** [https://linkspace-phi.vercel.app/](https://linkspace-phi.vercel.app/)
+🌐 **Live Website:** [Link Space](https://linkspace-phi.vercel.app/)
 
 ---
  
