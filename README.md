@@ -1,27 +1,27 @@
-# 🔗 LinkSpace – Personal Link Organizer
+#  LinkSpace – Personal Link Organizer
 
 LinkSpace is a modern web application that helps users store, organize, and manage their personal links in one secure place.  
 Whether it's useful articles, tools, learning resources, or important URLs, LinkSpace keeps everything structured and accessible anytime, anywhere.
 
-🌐 **Live Website:** [Link Space](https://linkspace-phi.vercel.app/)   
+ **Live Website:** [Link Space](https://linkspace-phi.vercel.app/)   
 
 ---
  
-## ✨ Features
+##  Features
  
-- 🔐 **User Authentication** – Secure login & signup with email 
-- 📁 **Collections** – Organize links into custom collections
-- 📌 **Save & Manage Links** – Add, edit, and delete personal links
-- 🔗 **Share Collections** – Generate shareable links for your collections
-- 👤 **User Profiles** – Customize your profile with bio, avatar, and social links
-- 🔍 **Search** – Quick access to your saved links
-- 🌓 **Dark/Light Mode** – Toggle between themes
-- 📱 **Responsive Design** – Works seamlessly on mobile & desktop
-- ⚡ **Fast & Lightweight** – Optimized user experience
+-  **User Authentication** – Secure login & signup with email 
+-  **Collections** – Organize links into custom collections
+-  **Save & Manage Links** – Add, edit, and delete personal links
+-  **Share Collections** – Generate shareable links for your collections
+-  **User Profiles** – Customize your profile with bio, avatar, and social links
+-  **Search** – Quick access to your saved links
+-  **Dark/Light Mode** – Toggle between themes
+-  **Responsive Design** – Works seamlessly on mobile & desktop
+-  **Fast & Lightweight** – Optimized user experience
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React 18** with TypeScript
@@ -40,7 +40,7 @@ Whether it's useful articles, tools, learning resources, or important URLs, Link
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
@@ -70,27 +70,27 @@ The app will be available at `http://localhost:5173`
 
 ---
 
-## 🎯 Use Cases
+##  Use Cases
 
-- 📚 Store study & learning resources
-- 💼 Save important work-related links
-- 🔖 Organize personal bookmarks
-- 📱 Manage links across devices
-- 🤝 Share curated collections with others
-
----
-
-## 🔮 Future Enhancements
-
-- 🏷️ Tags and advanced filtering
-- 📊 Link usage analytics
-- 📥 Import/Export functionality
-- 🔔 Notifications for shared collections
-- 🎨 Custom themes
+-  Store study & learning resources
+-  Save important work-related links
+-  Organize personal bookmarks
+-  Manage links across devices
+-  Share curated collections with others
 
 ---
 
-## 🤝 Contributing
+##  Future Enhancements
+
+-  Tags and advanced filtering
+-  Link usage analytics
+-  Import/Export functionality
+-  Notifications for shared collections
+-  Custom themes
+
+---
+
+##  Contributing
 
 Contributions are welcome! If you'd like to improve the UI, add features, or enhance performance:
 
@@ -102,13 +102,13 @@ Contributions are welcome! If you'd like to improve the UI, add features, or enh
 
 ---
 
-## 📜 License
+##  License
 
 This project is open-source and available under the **MIT License**.
 
 ---
 
-## 🙌 Author
+##  Author
 
 **Teku Syam Kumar**  
 3rd Year AIML Student  
