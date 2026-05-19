@@ -46,20 +46,20 @@ Whether it's useful articles, tools, learning resources, or important URLs, Link
 - Node.js 18+ 
 - npm or bun
 
-### 1️⃣ Clone the repository
+### 1️ Clone the repository
 ```bash
 git clone https://github.com/your-username/linkspace.git
 cd linkspace
 ```
 
-### 2️⃣ Install dependencies
+### 2️ Install dependencies
 ```bash
 npm install
 # or
 bun install
 ```
 
-### 3️⃣ Start the development server
+### 3️ Start the development server
 ```bash
 npm run dev
 # or
