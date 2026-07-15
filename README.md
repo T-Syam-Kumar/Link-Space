@@ -111,7 +111,7 @@ This project is open-source and available under the **MIT License**.
 ##  Author
 
 **Teku Syam Kumar**  
-3rd Year AIML Student  
+AIML Student  
 Passionate about Full-Stack Development & AI
 
 ---
